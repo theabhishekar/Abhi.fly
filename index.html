@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Plane Combat Simulator</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="game-container">
+        <canvas id="game-canvas"></canvas>
+        
+        <div id="cockpit-ui">
+            <div id="primary-instruments">
+                <div id="airspeed" class="instrument"></div>
+                <div id="attitude" class="instrument"></div>
+                <div id="altimeter" class="instrument"></div>
+            </div>
+            
+            <div id="secondary-instruments">
+                <div id="heading" class="instrument"></div>
+                <div id="vertical-speed" class="instrument"></div>
+                <div id="ammo" class="instrument">Ammo: 100</div>
+            </div>
+        </div>
+
+        <div id="game-ui">
+            <div id="player-info"></div>
+            <div id="score">Score: 0</div>
+            <div id="chat-container"></div>
+            <div id="players-list"></div>
+        </div>
+        
+        <div id="menu-overlay">
+            <div id="menu-content">
+                <h1>3D Plane Combat Simulator</h1>
+                <div id="player-name-input">
+                    <label for="player-name">Your Name:</label>
+                    <input type="text" id="player-name" placeholder="Enter your name">
+                </div>
+                <button id="start-game">Start Game</button>
+                <div id="controls-info">
+                    <h2>Controls:</h2>
+                    <p>W/S - Throttle Up/Down</p>
+                    <p>A/D - Yaw Left/Right</p>
+                    <p>Arrow Keys - Pitch/Roll</p>
+                    <p>Space - Shoot</p>
+                    <p>R - Respawn</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Three.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- Game Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/physics.js"></script>
+    <script src="js/aircraft.js"></script>
+    <script src="js/bullet.js"></script>
+    <script src="js/instruments.js"></script>
+    <script src="js/world.js"></script>
+    <script src="js/multiplayer.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
