@@ -96,12 +96,15 @@ class GameEngine {
     processInput() {
         if (!this.gameStarted || !this.playerAircraft) return;
         let pitch = 0;
+        let yaw = 0;
         let roll = 0;
         if (this.keys['ArrowUp']) pitch = -0.05;      // Pitch up
         if (this.keys['ArrowDown']) pitch = 0.05;     // Pitch down
-        if (this.keys['ArrowLeft']) roll = -0.05;
-        if (this.keys['ArrowRight']) roll = 0.05;
-        this.playerAircraft.setControls(pitch, 0, roll, this.throttle);
+        if (this.keys['ArrowLeft']) roll = -0.05;     // Roll left
+        if (this.keys['ArrowRight']) roll = 0.05;     // Roll right
+        if (this.keys['a'] || this.keys['A']) yaw = -0.05;  // Yaw left
+        if (this.keys['d'] || this.keys['D']) yaw = 0.05;   // Yaw right
+        this.playerAircraft.setControls(pitch, yaw, roll, this.throttle);
         this.playerAircraft.setThrust(this.throttle);
     }
 

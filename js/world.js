@@ -73,21 +73,83 @@ class World {
     createTree(x, z) {
         const treeGroup = new THREE.Group();
 
-        // Tree trunk
-        const trunkGeometry = new THREE.CylinderGeometry(0.5, 0.5, 4, 8);
-        const trunkMaterial = new THREE.MeshPhongMaterial({ color: 0x4A2B0F });
+        // Tree trunk - more detailed with slight taper
+        const trunkGeometry = new THREE.CylinderGeometry(0.4, 0.6, 5, 8);
+        const trunkMaterial = new THREE.MeshPhongMaterial({ 
+            color: 0x4A2B0F,
+            roughness: 0.8,
+            metalness: 0.2
+        });
         const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
-        trunk.position.y = 2;
+        trunk.position.y = 2.5;
         treeGroup.add(trunk);
 
-        // Tree top
-        const topGeometry = new THREE.ConeGeometry(2, 4, 8);
-        const topMaterial = new THREE.MeshPhongMaterial({ color: 0x0F4A2B });
-        const top = new THREE.Mesh(topGeometry, topMaterial);
-        top.position.y = 5;
-        treeGroup.add(top);
+        // Add some branches
+        const branchCount = 3 + Math.floor(Math.random() * 3);
+        for (let i = 0; i < branchCount; i++) {
+            const branchHeight = 1 + Math.random() * 1.5;
+            const branchRadius = 0.2 + Math.random() * 0.2;
+            const branchGeometry = new THREE.CylinderGeometry(branchRadius, branchRadius, branchHeight, 6);
+            const branchMaterial = new THREE.MeshPhongMaterial({ color: 0x3A1B0F });
+            const branch = new THREE.Mesh(branchGeometry, branchMaterial);
+            
+            // Position branch at different heights and angles
+            const angle = (i / branchCount) * Math.PI * 2;
+            const height = 3 + Math.random() * 2;
+            branch.position.set(
+                Math.cos(angle) * 0.8,
+                height,
+                Math.sin(angle) * 0.8
+            );
+            branch.rotation.z = Math.PI / 2;
+            branch.rotation.y = angle;
+            treeGroup.add(branch);
+        }
 
+        // Tree foliage - multiple layers for more realism
+        const foliageLayers = 3;
+        for (let i = 0; i < foliageLayers; i++) {
+            const scale = 1 - (i * 0.2);
+            const height = 1.5;
+            const yOffset = 4 + (i * 1.2);
+            
+            // Create a more natural-looking foliage shape
+            const foliageGeometry = new THREE.ConeGeometry(2 * scale, height, 8);
+            const foliageMaterial = new THREE.MeshPhongMaterial({ 
+                color: new THREE.Color(`hsl(${120 + Math.random() * 20}, 70%, ${30 + Math.random() * 10}%)`),
+                flatShading: true
+            });
+            const foliage = new THREE.Mesh(foliageGeometry, foliageMaterial);
+            foliage.position.y = yOffset;
+            treeGroup.add(foliage);
+        }
+
+        // Add some small details like pine cones
+        const coneCount = 2 + Math.floor(Math.random() * 3);
+        for (let i = 0; i < coneCount; i++) {
+            const coneGeometry = new THREE.ConeGeometry(0.2, 0.4, 6);
+            const coneMaterial = new THREE.MeshPhongMaterial({ color: 0x8B4513 });
+            const cone = new THREE.Mesh(coneGeometry, coneMaterial);
+            
+            // Position cones on the trunk
+            const angle = (i / coneCount) * Math.PI * 2;
+            const height = 2 + Math.random() * 3;
+            cone.position.set(
+                Math.cos(angle) * 0.6,
+                height,
+                Math.sin(angle) * 0.6
+            );
+            cone.rotation.x = Math.PI / 2;
+            cone.rotation.z = angle;
+            treeGroup.add(cone);
+        }
+
+        // Position the tree on the terrain
         treeGroup.position.set(x, 0, z);
+        
+        // Add some random rotation for variety
+        treeGroup.rotation.y = Math.random() * Math.PI * 2;
+        
         return treeGroup;
     }
 
@@ -102,18 +164,76 @@ class World {
     }
 
     createBuilding(x, z) {
+        const buildingGroup = new THREE.Group();
+        
+        // Main building dimensions
         const height = 5 + Math.random() * 15;
         const width = 5 + Math.random() * 10;
         const depth = 5 + Math.random() * 10;
 
-        // Random pastel color
-        const color = new THREE.Color(`hsl(${Math.floor(Math.random()*360)}, 60%, 70%)`);
-        const buildingMaterial = new THREE.MeshPhongMaterial({ color: color });
+        // Create main building structure
+        const buildingMaterial = new THREE.MeshPhongMaterial({ 
+            color: new THREE.Color(`hsl(${Math.floor(Math.random()*360)}, 30%, 60%)`),
+            roughness: 0.7,
+            metalness: 0.2
+        });
         const buildingGeometry = new THREE.BoxGeometry(width, height, depth);
         const building = new THREE.Mesh(buildingGeometry, buildingMaterial);
+        building.position.y = height/2;
+        buildingGroup.add(building);
 
-        building.position.set(x, height/2, z);
-        return building;
+        // Add windows
+        const windowMaterial = new THREE.MeshPhongMaterial({
+            color: 0xADD8E6,
+            emissive: 0x111111,
+            transparent: true,
+            opacity: 0.8
+        });
+
+        // Add windows to front and back
+        const windowRows = Math.floor(height / 3);
+        const windowCols = Math.floor(width / 2);
+        
+        for (let row = 0; row < windowRows; row++) {
+            for (let col = 0; col < windowCols; col++) {
+                const windowGeometry = new THREE.PlaneGeometry(1, 1);
+                
+                // Front window
+                const frontWindow = new THREE.Mesh(windowGeometry, windowMaterial);
+                frontWindow.position.set(
+                    (col * 2) - (width/2) + 1,
+                    (row * 3) - (height/2) + 2,
+                    depth/2 + 0.1
+                );
+                buildingGroup.add(frontWindow);
+                
+                // Back window
+                const backWindow = new THREE.Mesh(windowGeometry, windowMaterial);
+                backWindow.position.set(
+                    (col * 2) - (width/2) + 1,
+                    (row * 3) - (height/2) + 2,
+                    -depth/2 - 0.1
+                );
+                backWindow.rotation.y = Math.PI;
+                buildingGroup.add(backWindow);
+            }
+        }
+
+        // Add a roof
+        const roofGeometry = new THREE.ConeGeometry(Math.max(width, depth) / 1.5, height/4, 4);
+        const roofMaterial = new THREE.MeshPhongMaterial({ 
+            color: 0x8B0000,
+            roughness: 0.8
+        });
+        const roof = new THREE.Mesh(roofGeometry, roofMaterial);
+        roof.position.y = height + height/8;
+        roof.rotation.y = Math.PI/4;
+        buildingGroup.add(roof);
+
+        // Position the building
+        buildingGroup.position.set(x, 0, z);
+        
+        return buildingGroup;
     }
 
     createBuildings() {

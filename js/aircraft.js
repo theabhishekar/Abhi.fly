@@ -183,6 +183,20 @@ class Aircraft {
         // Apply gravity
         this.velocity.y -= 9.81 * deltaTime;
         
+        // Apply lift based on forward speed and pitch
+        const liftForce = new THREE.Vector3(0, 1, 0);
+        liftForce.applyEuler(new THREE.Euler(this.rotation.x, 0, 0));
+        const liftMagnitude = speed * speed * 0.05 * Math.abs(this.rotation.x);
+        this.velocity.add(liftForce.multiplyScalar(liftMagnitude * deltaTime));
+        
+        // Apply banking effect (turning when rolling)
+        if (Math.abs(this.rotation.z) > 0.1) {
+            const bankingForce = new THREE.Vector3(1, 0, 0);
+            bankingForce.applyEuler(new THREE.Euler(0, this.rotation.y, 0));
+            const bankingMagnitude = speed * 0.2 * Math.sin(this.rotation.z);
+            this.velocity.add(bankingForce.multiplyScalar(bankingMagnitude * deltaTime));
+        }
+        
         // Update position
         this.position.add(this.velocity.clone().multiplyScalar(deltaTime));
         

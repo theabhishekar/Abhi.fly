@@ -23,8 +23,8 @@ const CONFIG = {
         terrainSize: 10000,
         terrainHeight: 1000,
         cloudDensity: 0.5,
-        treeCount: 300,
-        buildingCount: 60
+        treeCount: 1000,
+        buildingCount: 200
     },
     
     // Environment settings
