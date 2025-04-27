@@ -1,6 +1,6 @@
 # 3D Plane Combat Simulator
 
-A multiplayer 3D plane combat simulator built with Three.js and WebSockets.
+A multiplayer 3D plane combat simulator built with Three.js and WebSockets, with Streamlit integration for public URL access.
 
 ## Features
 
@@ -9,6 +9,7 @@ A multiplayer 3D plane combat simulator built with Three.js and WebSockets.
 - Real-time player synchronization
 - Chat system
 - Score tracking
+- Streamlit interface for public URL access
 
 ## Setup and Installation
 
@@ -16,6 +17,7 @@ A multiplayer 3D plane combat simulator built with Three.js and WebSockets.
 
 - Node.js (v14 or higher)
 - npm (v6 or higher)
+- Python 3.8 or higher (for Streamlit integration)
 
 ### Local Development
 
@@ -25,20 +27,42 @@ A multiplayer 3D plane combat simulator built with Three.js and WebSockets.
    cd 3d-plane-combat-simulator
    ```
 
-2. Install dependencies:
+2. Install Node.js dependencies:
    ```
    npm install
    ```
 
-3. Start the development server:
+3. Install Python dependencies:
+   ```
+   pip install -r requirements.txt
+   ```
+
+4. Start the development server:
    ```
    npm run dev
    ```
 
-4. Open your browser and navigate to:
+5. Open your browser and navigate to:
    ```
    http://localhost:8080
    ```
+
+### Streamlit Integration
+
+The project now includes Streamlit integration, which provides a public URL for accessing the application.
+
+1. Run the Streamlit app:
+   ```
+   streamlit run app.py
+   ```
+   
+   Or use the provided scripts:
+   - Windows: `run_streamlit.bat`
+   - macOS/Linux: `./run_streamlit.sh`
+
+2. Streamlit will provide a public URL that you can share with others.
+
+3. Click the "Launch Flight Simulator" button in the Streamlit interface to start the Three.js application.
 
 ### Configuration
 
@@ -64,12 +88,17 @@ environment: {
 ### Option 1: Deploy to a VPS (Virtual Private Server)
 
 1. Set up a VPS with a provider like DigitalOcean, AWS, or Linode
-2. Install Node.js on the server
+2. Install Node.js and Python on the server
 3. Upload your game files to the server
-4. Install dependencies: `npm install`
+4. Install dependencies: 
+   ```
+   npm install
+   pip install -r requirements.txt
+   ```
 5. Start the server: `npm start`
-6. Set up a reverse proxy with Nginx or Apache to handle HTTPS
-7. Update the production server URL in `js/config.js`
+6. Start the Streamlit app: `streamlit run app.py`
+7. Set up a reverse proxy with Nginx or Apache to handle HTTPS
+8. Update the production server URL in `js/config.js`
 
 ### Option 2: Deploy to a Platform as a Service (PaaS)
 
